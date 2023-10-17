@@ -1,0 +1,2 @@
+inputDir: ./templates/
+outputDir: /etc/keepalived/

@@ -1,0 +1,20 @@
+#!/bin/bash -e
+
+# split SWARMVIP_ADDRESSES env var into an array
+IFS=',' read -ra SWARMVIP_ADDRESSES_ARRAY <<< "$SWARMVIP_ADDRESSES"
+for VIP in "${SWARMVIP_ADDRESSES_ARRAY[@]}"; do
+  IP_INFO=$(ip addr list | grep "${VIP}") || continue
+  IP_V6=$(echo "${IP_INFO}" | grep "inet6") || true
+
+  # ipv4
+  if [ -z "${IP_V6}" ]; then
+    IP_INTERFACE=$(echo "${IP_INFO}" |  awk '{print $5}')
+  # ipv6
+  else
+    echo "skipping address: ${VIP} - ipv6 not supported!"
+    continue
+  fi
+
+  echo "Pruning virtual ip ${SWARMVIP_ADDRESS}"
+  ip addr del "${VIP}" dev "${IP_INTERFACE}" || true
+done

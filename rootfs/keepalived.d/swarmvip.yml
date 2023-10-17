@@ -1,0 +1,12 @@
+default_interface: eth0
+
+vrrp_instance:
+  - name: VI_1
+    # interface: eth1
+    state: MASTER # state can be MASTER or BACKUP
+    priority: 150
+    authentication:
+      auth_pass: password
+    virtual_router_id: 51
+    virtual_ipaddress:
+      - 10.10.10.100/24

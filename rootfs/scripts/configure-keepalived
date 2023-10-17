@@ -1,0 +1,12 @@
+#!/bin/bash -e
+
+if [[ -z "${SWARMVIP_ADDRESSES}" ]]; then
+    echo "The SWARMVIP_ADDRESSES environment variable is not set. Exiting."
+    exit 1
+fi
+
+cd "/etc/gomplate/keepalived" || exit 1
+gomplate --verbose --config /etc/gomplate/keepalived/config.yml
+
+echo "Keepalived configuration:"
+cat /etc/keepalived/keepalived.conf

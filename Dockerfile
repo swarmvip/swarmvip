@@ -9,11 +9,14 @@ RUN apk update && apk add --no-cache \
 ARG S6_OVERLAY_VERSION=v3.1.5.0
 ARG S6_OVERLAY_INSTALLER=main/s6-overlay-installer.sh
 RUN sh -c "$(curl -fsSL https://raw.githubusercontent.com/socheatsok78/s6-overlay-installer/${S6_OVERLAY_INSTALLER})"
+ENV S6_KEEP_ENV=1
+ENV S6_BEHAVIOUR_IF_STAGE2_FAILS=2
 ENTRYPOINT [ "/init" ]
 CMD [ "sleep", "infinity" ]
 
 ARG TARGETARCH
 ADD https://github.com/hairyhenderson/gomplate/releases/download/v3.11.5/gomplate_linux-${TARGETARCH} /usr/local/bin/gomplate
+RUN chmod +x /usr/local/bin/gomplate
 
 RUN apk update && apk add --no-cache \
         keepalived \
@@ -25,8 +28,15 @@ ENV TASK_SLOT=
 ENV KEEPALIVED_CONFIG_FILE=/etc/keepalived/keepalived.conf
 ENV KEEPALIVED_ARGS=
 
-ENV KEEPALIVED_INTERFACE=eth0
-ENV KEEPALIVED_STATE=MASTER
-ENV KEEPALIVED_ROUTER_ID=51
-ENV KEEPALIVED_PRIORITY=150
-ENV KEEPALIVED_PASSWORD=dockerswarm
+ENV SWARMVIP_INTERFACE=eth0
+ENV SWARMVIP_SLOT=1
+ENV SWARMVIP_VRID=51
+ENV SWARMVIP_TOKEN=dockerswarm
+ENV SWARMVIP_INIT_CLUSTER=
+ENV SWARMVIP_ADDRESSES=
+
+ADD rootfs /
+
+RUN apk update && apk add --no-cache \
+        bind-tools \
+    && rm -rf /var/cache/apk/*
