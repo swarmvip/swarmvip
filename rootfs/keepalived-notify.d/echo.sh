@@ -16,16 +16,16 @@
 STATE=$3
 
 case $STATE in
-    "MASTER") echo "[ACK] Node is now MASTER!." > /proc/1/fd/1
+    "MASTER") echo " --> [ACK] Node is now MASTER!." > /proc/1/fd/1
         exit 0
     ;;
-    "BACKUP") echo "[ACK] Node is now A BACKUP" > /proc/1/fd/1
+    "BACKUP") echo " --> [ACK] Node is now A BACKUP" > /proc/1/fd/1
         exit 0
     ;;
-    "FAULT")  echo "[ACK] Received status \"FAULT\", something went wrongs!" > /proc/1/fd/1
+    "FAULT")  echo " --> [ACK] Received status \"FAULT\", something went wrongs!" > /proc/1/fd/1
         exit 0
     ;;
-    *)        echo "[ACK] Unknown state" > /proc/1/fd/1
+    *)        echo " --> [ACK] Unknown state" > /proc/1/fd/1
         exit 1
     ;;
 esac

@@ -15,6 +15,5 @@ for VIP in "${SWARMVIP_ADDRESSES_ARRAY[@]}"; do
     continue
   fi
 
-  echo "Pruning virtual ip ${SWARMVIP_ADDRESS}"
   ip addr del "${VIP}" dev "${IP_INTERFACE}" || true
 done

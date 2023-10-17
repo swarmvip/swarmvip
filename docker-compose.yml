@@ -1,20 +1,25 @@
 services:
   swarmvip:
     image: localhost/keepalived:latest
-    privileged: true
+    networks:
+      - host
     cap_add:
       - "NET_RAW"
       - "NET_ADMIN"
       - "NET_BROADCAST"
     environment:
-      - SWARMVIP_INTERFACE=eth0
+      - SWARMVIP_INTERFACE=eth1
       - SWARMVIP_SLOT={{.Task.Slot}}
       - SWARMVIP_ADDRESSES=10.130.0.33
+      - SWARMVIP_INIT_CLUSTER=10.130.0.3,10.130.0.4
     deploy:
       replicas: 2
       placement:
         max_replicas_per_node: 1
-
+      update_config:
+        order: stop-first
+      rollback_config:
+        order: stop-first
 networks:
   host:
     name: host
