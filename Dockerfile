@@ -19,6 +19,8 @@ ADD https://github.com/hairyhenderson/gomplate/releases/download/v3.11.5/gomplat
 RUN chmod +x /usr/local/bin/gomplate
 
 RUN apk update && apk add --no-cache \
+        ipvsadm \
+        iproute2 \
         keepalived \
     && rm -rf /var/cache/apk/*
 
